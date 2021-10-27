@@ -66,3 +66,18 @@ inMemoryAuthentication()
 
 When using TLS headers are encoded
 Form based auth provide remember me option
+
+
+## State 1 Basic Auth
+1. Go to http://localhost:8080/user using browser 
+2. Close the popup and go to the developer tools network tab
+3. Refresh the page and you will see "/user" respond is "Status Code: 401"  headers include "WWW-Authenticate: Basic realm="Realm" and "Set-Cookie: JSESSIONID=4DBD3BCC71CE656924F0D1DCDC5569E7; Path=/; HttpOnly"
+4. ![basic_first_request_no_jessionid](basic_first_request_no_jessionid.PNG)
+5. Above JSESSIONID will be used in request headers herafter even whether you logged-in or not
+6. Refresh the "http://localhost:8080/user" more, spring security will intercept every time don't let "/user" respond and put "WWW-Authenticate: Basic realm="Realm" to the response without "Set-Cookie: ..." cuz it is already set
+7. 4. ![basic_second_request_has_sessionid](basic_second_request_has_sessionid.PNG)
+8. Browser will show you login popup because ""WWW-Authenticate: Basic realm="Realm" means that
+9. If you put "yusufadmin" and "pass" which is correct one browser will **encode("yusufadmin:pass")** and send as "Authorization: Basic **encode("yusufadmin:pass")**"
+10. ![basic_successfull_login](basic_successfull_login.PNG)
+11. Basic authentication doesn't print seperate login request log in browser network tab because there is no seperate login endpoint, every request should include "Authorization: Basic **encode("yusufadmin:pass")**"
+12. After successful login response headers doesn't include "WWW-Authenticate: Basic realm="Realm"

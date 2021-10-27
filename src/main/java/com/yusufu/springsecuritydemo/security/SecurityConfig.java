@@ -83,14 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAuthority("ADMIN") // (1)
                 .antMatchers("/user/**").hasAnyAuthority("ADMIN", "USER","ROLE_USER") // (2)
                 .and()
-                .formLogin()
-                .defaultSuccessUrl("/user")
-                .and()
-                .logout().invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-
-
+                .httpBasic();
     }
 
     PasswordEncoder passwordEncoder() {
